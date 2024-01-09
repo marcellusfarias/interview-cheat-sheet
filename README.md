@@ -21,20 +21,37 @@ Heap/stack, garbage collector
 #### Resource sharing
 .
 
-## ASP NET
-
-#### Dependency Injection
+#### Performance and monitoring tools
 .
 
-#### Web APIs
-.
+## .NET
 
-#### Lifetime
-.
+#### Features
+* Cross-platform
+* Open source
+* Lightweight
+* High performance
+
+#### ASP .NET
+* Kestrel
+* Middleware and filters
+* Configuration
+* Logging
+* Dependency Injection
+* Lifetime scopes
 
 #### Ef Core
 
-Tracking, Lazy vs eager loading, Lambda functions, Migrations and code first
+* Tracking, 
+* Lazy vs eager loading, 
+* LINQ/Lambda functions
+* Transactions
+* Migrations and code first
+
+#### Others
+
+* AOT
+* Reflection
 
 ## SQL
 
@@ -48,25 +65,38 @@ Clustered vs non-clustered
 #### Transactions
 .
 
+## Git
+
+#### Rebase
+.
+
+#### Merge
+.
+
+#### Cherry pick
+.
 
 ## Software Engineering
 
-### Design Patterns
+#### Design Patterns
 
 **Singleton**: a single instance of a determined class throughout the project.
-
 **Facade**: a "big interface" that normally has several adapters related to a specific task.
-
 **Factory**: a class that can generate other classes. One use case is that a factory is provided some parameters and return an Interface object which may be any object that implement it.
-
 **DDD**: separation of concerns.
 
-### Quality workflow 
+#### Quality 
 
+Code quality:
+* DRY, KISS, YAGNI, SOLID
+* High modular, decoupled code.
+* Variable naming.
+* Test coverage & test types
+
+Workflow quality:
 * Pair programming
 * Code review & pull requests
 * Feature branches
-* Test coverage & test types
 * Different environments
 * CI/CD pipeline
 * Scrum/Kanbam
