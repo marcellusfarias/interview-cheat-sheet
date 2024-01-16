@@ -19,15 +19,13 @@ Heap/stack, garbage collector
 
 There are some lock types in C#.
 
-* Lock keyword/monitor: Creates a basic code zone where only one thread can enter at the same time. This is precisely the same as using Monitor.Enter/Exit class. One can't use the **await** keyword on it and should not work with Tasks on it, as it would probably lead to thread starvation.
+* Lock keyword/monitor: Creates a basic code zone where only one thread can enter at the same time. This is precisely the same as using Monitor.Enter/Exit class. One can't use the **await** keyword on it and should not work with Tasks on it, as it would probably lead to thread starvation. Both code snippets below are equivalents:
 ```
 lock (x)
 {
     // Your code...
 }
 ```
-
-it's the same as 
 ```
 object __lockObj = x;
 bool __lockWasTaken = false;
@@ -41,9 +39,22 @@ finally
     if (__lockWasTaken) System.Threading.Monitor.Exit(__lockObj);
 }
 ```
-* Mutex: this is similar to Monitor but can be named and shared between processes and async code (which lock keyword cannot). The mutex is provided by the OS, so a good use case is to share it between two different applications.
+* Mutex: can be named and shared between processes and async code (which lock keyword cannot). The mutex is provided by the OS, so a good use case is to share it between two different applications that run on the same machine. Note that there are also local mutexes (it exists on its process) and the way you use may vary from OS to OS.
 ```
-Mutex mutex = new();
+Mutex m = new Mutex(false, "MyMutex");
+        
+// Try to gain control of the named mutex. If the mutex is 
+// controlled by another thread, wait for it to be released.        
+Console.WriteLine("Waiting for the Mutex.");
+m.WaitOne();
+
+// Keep control of the mutex until the user presses
+// ENTER.
+Console.WriteLine("This application owns the mutex. " +
+    "Press ENTER to release the mutex and exit.");
+Console.ReadLine();
+
+m.ReleaseMutex();
 ```
 
 * SemaphoreSlim: It allows you to fine-tune the number of threads that can enter into the critical zone. It's a good approach for a "lock" that must done in an async manner.
@@ -128,13 +139,9 @@ public class Example
 //       Task 5 releases the semaphore; previous count: 2.
 //       Main thread exits.
 ```
-* ManualResetEvent/AutoResetEvent: These classes can be shared among threads to allow precise control regarding when some code should wait and when it can execute. The major difference here is that the code is not restricted to a critical zone.
 
 
 #### Multi threading
-.
-
-#### Resource sharing
 .
 
 #### Performance and monitoring tools
