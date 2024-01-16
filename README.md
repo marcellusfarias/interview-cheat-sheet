@@ -40,7 +40,7 @@ If GC runs a compact strategy, it may happen it could compact segment 1, move th
 
 For an object to be allocated on second generation segment, GC must run again and notice the object on segment 1 is still relevant and can be moved to the second one.
 
-Developers should avoid objects to be allocated on the segment 2 for aiming for better performance.
+Developers should avoid objects to be allocated on the segment 2 for aiming for optimization. According to this [video](https://www.youtube.com/watch?v=TnDRzHZbOio), the processing time is not the issue. The problem is with memory allocation. Allocating things in LOH costs much more than allocating in SOH. Another tip from the video is that allocating bigger objects less times is better than allocating smaller objects more time.
 
 2. **Garbage collector**:
 
