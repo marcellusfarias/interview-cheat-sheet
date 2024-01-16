@@ -4,22 +4,55 @@ Gathered questions and answers from practing to .Net Sr. Software Engineer inter
 
 ## C#
 
-#### Data Structures
+### Data Structures
 
-List, array, dictionary.
+1. Array
+2. List: inside of it is an array. When it reaches the limit of the array, it gets doubled.
+3. Dictionary
 
-#### Reference types/value types
+### Reference types/value types
 .
 
-#### Memory management
+### Memory management
 
-Heap/stack, garbage collector
+There are three topics on this section: heaps, stack and garbage collector.  To check for memory usage, one may use [memory usage](https://learn.microsoft.com/en-us/visualstudio/profiling/memory-usage?view=vs-2022) or [performance profiler](https://learn.microsoft.com/en-us/visualstudio/profiling/profiling-feature-tour?view=vs-2022#post_mortem) (both in Visual Studio). 
 
-#### Locks
+1. **Heaps**
 
-There are some lock types in C#.
+It divides the heap into three segments: 0, 1 and 2 (the last one is splitted into two pieces). It organizes it into two pieces: SOH (small object heap) and LOH (large object heap):
+* Large Object Heap: things that dont change (constants, static objects, etc) and objects larger than 85KB. Consists of the second piece of segment 2.
+* Small Object Heap: consists of segment 0, 1 and the first piece of 2. Generally, developers only write into the 0 segment.
 
-* Lock keyword/monitor: Creates a basic code zone where only one thread can enter at the same time. This is precisely the same as using Monitor.Enter/Exit class. One can't use the **await** keyword on it and should not work with Tasks on it, as it would probably lead to thread starvation. Both code snippets below are equivalents:
+The segments work as a way for the Garbage Collector (GC) to clean up things. For example:
+* If asked to clean up 0, 0 is going to be cleaned up
+* If asked to clean up 1, 0 **and** 1 are going to be cleaned up
+* If asked to clean up 2, all will be cleaned up (including LOH).
+
+Note that objects that have a reference to itself are not going to be cleaned up.
+
+For a object to be allocated on segment 1, GC must have ran and a reference to the objects should exist. That tells GC "this object is a little relevant" and what happens is that it updates the boundary from segment 1 to include those objects. Check the following image.
+
+<p align="center">
+  <img src="./gc_1.png" alt="Example" width="400">
+</p>
+
+If GC runs a compact strategy, it may happen it could compact segment 1, move the objects to a location where it could narrow and make the segment 1 space smaller.
+
+For an object to be allocated on second generation segment, GC must run again and notice the object on segment 1 is still relevant and can be moved to the second one.
+
+Developers should avoid objects to be allocated on the segment 2 for aiming for better performance.
+
+2. **Garbage collector**:
+
+There are two modes: sweep and compact.
+* Sweep: flips a bit on the object that says the memory can be occupied by something else.
+* Compact: remove the objects and compact the remaining ones.
+
+### Locks
+
+There are some lock types in C#. Here we will cover lock (monitor), mutex and semaphore/slimsemaphore.
+
+1. **Lock keyword/monitor**: creates a basic code zone where only one thread can enter at the same time. This is precisely the same as using Monitor.Enter/Exit class. One can't use the **await** keyword on it and should not work with Tasks on it, as it would probably lead to thread starvation. Both code snippets below are equivalents:
 ```
 lock (x)
 {
@@ -39,7 +72,7 @@ finally
     if (__lockWasTaken) System.Threading.Monitor.Exit(__lockObj);
 }
 ```
-* Mutex: can be named and shared between processes and async code (which lock keyword cannot). The mutex is provided by the OS, so a good use case is to share it between two different applications that run on the same machine. Note that there are also local mutexes (it exists on its process) and the way you use may vary from OS to OS.
+2. **Mutex**: can be named and shared between processes and async code (which lock keyword cannot). The mutex is provided by the OS, so a good use case is to share it between two different applications that run on the same machine. Note that there are also local mutexes (it exists on its process) and the way you use may vary from OS to OS.
 ```
 Mutex m = new Mutex(false, "MyMutex");
         
@@ -56,8 +89,7 @@ Console.ReadLine();
 
 m.ReleaseMutex();
 ```
-
-* SemaphoreSlim: It allows you to fine-tune the number of threads that can enter into the critical zone. It's a good approach for a "lock" that must done in an async manner.
+3. **SemaphoreSlim**: It allows you to fine-tune the number of threads that can enter into the critical zone. It's a good approach for a "lock" that must done in an async manner.
 ```
 using System;
 using System.Threading;
