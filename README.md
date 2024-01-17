@@ -42,11 +42,79 @@ For an object to be allocated on second generation segment, GC must run again an
 
 Developers should avoid objects to be allocated on the segment 2 for aiming for optimization. According to this [video](https://www.youtube.com/watch?v=TnDRzHZbOio), the processing time is not the issue. The problem is with memory allocation. Allocating things in LOH costs much more than allocating in SOH. Another tip from the video is that allocating bigger objects less times is better than allocating smaller objects more time.
 
-2. **Garbage collector**:
+2. **Garbage collector and Dispose**:
 
-There are two modes: sweep and compact.
-* Sweep: flips a bit on the object that says the memory can be occupied by something else.
+GC works only on managed resources'; i.e. resources that are controlled by the CLR. Unmanaged resources are e.g. file handles, network connections, database connections. 
+
+#### Managed resources
+
+There are two modes:
+* Sweep/mark: flips a bit on the object that says the memory can be occupied by something else.
 * Compact: remove the objects and compact the remaining ones.
+
+GC runs on a separate thread from the program, so the program doesnt get halted for it's execution. There is a configuration for the GC that one may change: telling the GC it's running on a workstation or on a server. If it's on a server, it's presumed the server has enough resources to the GC to run more frequently, so it won't make the program performance slower. Anyway, normally the automatic settings work ok.
+
+#### Unmanaged resources
+
+Differences between Finalize and Dispose and GC:
+* Finalize is called by GC, so it's a last time to release resources.
+* Dispose is called by developer, so it reclaims space before GC runs. Normally by using the **using** block, or by expliciting calling the Dispose method.
+
+The best practice is to implement the IDisposable interface on classes that handle unmanaged resources, since dealing with unmanaged resources is a developer responsability (and not doing that can potentially lead to memory leaks). In addition to that, developers normally use the Finalize (aka destructor) to dispose the unmanaged resources in case the developer forgot to call the Dispose previously.
+
+Example with the Dispose Pattern applied: 
+
+```
+public class MixedClass : IDisposable
+{
+    private StreamWriter _writer; // managed resource
+    private Excel.Application _excel; // unmanaged resource
+    private bool disposedValue;
+
+    public void Initialize()
+    {
+      _writer = new StreamWriter("output_file.txt");
+      _excel = new Excel.Application();
+    }
+
+    [SupportedOSPlatform("windows")]
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!disposedValue)
+        {
+            if (disposing)
+            {
+                _writer?.Dispose();
+                Console.WriteLine("Disposing of writer");
+            }
+			
+            if(_excel != null)
+            {
+                _excel.Quit();
+                Marshal.ReleaseComObject(_excel);
+                Console.WriteLine("Releasing Excel");
+            }
+			
+            disposedValue = true;
+        }
+    }
+
+    // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
+    [SupportedOSPlatform("windows")]
+    ~MixedClass()
+    {
+        // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+        Dispose(disposing: false);
+    }
+    [SupportedOSPlatform("windows")]
+    public void Dispose()
+    {
+        // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+		    Dispose(disposing: true);
+        GC.SuppressFinalize(this);
+    }
+}
+```
 
 ### Locks
 
