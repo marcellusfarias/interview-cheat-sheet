@@ -11,7 +11,29 @@ Gathered questions and answers from practing to .Net Sr. Software Engineer inter
 3. Dictionary
 
 ### Reference types/value types
-.
+
+1. Value Types: directly contain their data, and each instance of a value type has its own copy of the data. They are typically stored on the stack, which is a region of memory that is faster to allocate and deallocate. Examples of value types in C# include simple types like integers, float,  char, and **custom structs**.
+
+2. Reference Types: store a reference to the memory location where the actual data is held. They don't contain the data directly and are typically stored on the heap, which is a region of memory that is more flexible but slower to allocate and deallocate. Examples of reference types in C# include classes, interfaces, **arrays**, and **strings**.
+
+Some quick answers:
+* Structs can not have a reference type on its fields.
+* Strings are immutable, meaning their values cannot be changed after they are created. When you modify a string, you are actually creating a new string instance rather than modifying the existing one (that's the reason StringBuilder is better, as it uses a resizable buffer). String literals are stored in a special area of memory known as the intern pool. 
+* On methods, if you do not use the **ref** keyword on the signature and it is a value type, you will pass a copy of the value. Reference types are always being passed as references.
+
+```
+// Passing by value
+void ModifyValue(int num) 
+{
+    num = 20; // Changes inside the method do not affect the original value
+}
+
+// Passing by reference
+void ModifyReferenceType(ref int[] array) 
+{
+    array[0] = 42; // Changes inside the method affect the original array
+}
+```
 
 ### Memory management
 
