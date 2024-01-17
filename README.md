@@ -7,7 +7,7 @@ Gathered questions and answers from practing to .Net Sr. Software Engineer inter
 ### Data Structures
 
 1. Array
-2. List: inside of it is an array. When it reaches the limit of the array, it gets doubled.
+2. List: inside of it is an array. When it reaches the limit of the array (aka as _capacity_), it gets doubled and the elements are copied to the new location. 
 3. Dictionary
 
 ### Reference types/value types
@@ -40,7 +40,10 @@ If GC runs a compact strategy, it may happen it could compact segment 1, move th
 
 For an object to be allocated on second generation segment, GC must run again and notice the object on segment 1 is still relevant and can be moved to the second one.
 
-Developers should avoid objects to be allocated on the segment 2 for aiming for optimization. According to this [video](https://www.youtube.com/watch?v=TnDRzHZbOio), the processing time is not the issue. The problem is with memory allocation. Allocating things in LOH costs much more than allocating in SOH. Another tip from the video is that allocating bigger objects less times is better than allocating smaller objects more time.
+Developers should avoid objects to be allocated on the segment 2 for aiming for optimization. According to this [video](https://www.youtube.com/watch?v=TnDRzHZbOio), the accessing time is not the issue. The problem is with memory allocation. Allocating things in LOH costs much more than allocating in SOH. Another tip from the video is that allocating bigger objects less times is better than allocating smaller objects more time.
+
+Challenge: write a program that adds many class to the list. Check if what makes it being moved to LOH is the size of the list (which are references to the object) or the size of the objects summed up. Check if what is moved to LOH is only the list or also the objects.
+
 
 2. **Garbage collector and Dispose**:
 
