@@ -8,6 +8,31 @@ Gathered questions and answers from practing to .Net Sr. Software Engineer inter
 
 There are some collections on C#. They vary on complexity and use cases. For deeper understanding, consult [this link](https://learn.microsoft.com/en-us/dotnet/standard/collections/#algorithmic-complexity-of-collections).
 
+#### Introduction
+
+Before going into the collections provided by the framework, we should understand some concepts. Collections implement data structures behind the scenes, and these data structures will guide us on things like Time and Space complexity. Some of the most common data structures are:
+* Array: are stored sequentially in the memory and with pre-reserved amount of data.
+* Dynamic Array: just like array, is stored sequentially. The difference is greater capacity is needed, the CLR copies the entire array to a new space of memory with doubled capacity.
+* Double Linked-List: 
+* HashTable
+* Binary Search Tree
+* Red-Black Tree
+* B-Tree
+
+|                        | .Net Collection                              | Add(value)   | InsertAt   | Add Beyond Capacity | Remove/RemoveAt | Item[index] | Contains(value) |
+|------------------------|----------------------------------------------|--------------|------------|---------------------|-----------------|-------------|-----------------|
+| **Array**              | Array                                        |     O(1)     |    O(n)    |          ?          |       O(n)      |     O(1)    |       O(n)      |
+| **Dynamic Array**      | List<T>, Stack<T>, Queue<T>                  |     O(1)     |    O(n)    |         O(n)        |       O(n)      |     O(1)    |       O(n)      |
+| **Double Linked-List** | LinkedList<T>                                |  O(1)/O(n) * | O(1)/O(n)* |         O(1)        |   O(1)/O(n) *   |     O(n)    |       O(n)      |
+| **HashTables**         | Dictionary<TKey, TValue>, HashSet<T>         |  O(1)/O(n)*  |      -     |         O(n)        |    O(1)/O(n)*   |  O(1)/O(n)* |       O(n)      |
+| **Red-black tree**     | SortedDictionary<TKey, TValue>, SortedSet<T> |   O(log n)   |  O(log n)  |       O(log n)      |     O(log n)    |   O(log n)  |     O(log n)    |
+
+Commentaries:
+* Of course Stack and Queue do not have InsertAt nor RemoveAt operations.
+* Double Linked-List: * O(1) if already has a pointer to the item before/after. O(n) if must find the position
+* HashTables: it's normally O(1). If there is collision on the hash value, it will store the collided items in an array (that's why O(n)). Obviously no Contains on HashSet.
+
+
 #### Not thread-safe
 
 The first section will focus on not thread-safe collections. Those are the most used. Some of the collections available are:
@@ -22,6 +47,7 @@ The first section will focus on not thread-safe collections. Those are the most 
 
 The important thing is to understand how each of them works behind the scenes. They may use:
 * Array
+* Dynamic Array
 * Red-black tree
 * Binary tree
 * HashSet
