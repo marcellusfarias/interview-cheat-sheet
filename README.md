@@ -6,9 +6,40 @@ Gathered questions and answers from practing to .Net Sr. Software Engineer inter
 
 ### Data Structures
 
+There are some collections on C#. They vary on complexity and use cases. For deeper understanding, consult [this link](https://learn.microsoft.com/en-us/dotnet/standard/collections/#algorithmic-complexity-of-collections).
+
+#### Not thread-safe
+
+The first section will focus on not thread-safe collections. Those are the most used. Some of the collections available are:
+* Array
+* List
+* Dictionary
+* HashSet
+* LinkedList
+* SortedList
+* Queue
+* Stack
+
+The important thing is to understand how each of them works behind the scenes. They may use:
+* Array
+* Red-black tree
+* Binary tree
+* HashSet
+
+And how each one allocate memory. 
+
+| Data Structure | Complexity | Worst Case |   |   |
+|----------------|------------|------------|---|---|
+|                |            |            |   |   |
+|                |            |            |   |   |
+|                |            |            |   |   |
+
+#### Thread safe
+
 1. Array
 2. List: inside of it is an array. When it reaches the limit of the array (aka as _capacity_), it gets doubled and the elements are copied to the new location. 
 3. Dictionary
+
 
 ### Reference types/value types
 
