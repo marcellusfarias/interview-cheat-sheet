@@ -48,6 +48,12 @@ Often immutable collection types are less performant but provide immutability - 
 
 and others.
 
+Sources:
+* https://github.com/RehanSaeed/.NET-Big-O-Algorithm-Complexity-Cheat-Sheet/blob/main/Cheat%20Sheet.pdf
+* https://learn.microsoft.com/en-us/dotnet/standard/collections/#algorithmic-complexity-of-collections
+* https://hovermind.com/csharp/runtime-complexity-of-generic-collection.html
+* https://www.bigocheatsheet.com/
+
 ### Reference types/value types
 
 1. Value Types: directly contain their data, and each instance of a value type has its own copy of the data. They are typically stored on the stack, which is a region of memory that is faster to allocate and deallocate. Examples of value types in C# include simple types like integers, float,  char, and **custom structs**.
