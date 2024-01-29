@@ -340,6 +340,77 @@ public class Example
 * Transactions
 * Migrations and code first
 
+#### MVC
+
+##### Views
+* Partial views vs View components: partial views work for parts of view that does not need server processing, while view components can do.
+Partial view discovery:
+* /Areas/<Area-Name>/Views/<Controller-Name>
+* /Areas/<Area-Name>/Views/Shared
+* /Views/Shared
+* /Pages/Shared
+
+* View discovery: return View(); "NameOfTheView", "../Manage/Index", "~/AbsolutePath/View.cshtml". You can customize the default convention for how views are located within the app by using a custom IViewLocationExpander.
+
+ViewModel are strongly typed models. They are passed by the controller as a parameter (_return View(viewModel)_) and can be referenced on the view using the following syntax: _@model WebApplication1.ViewModels_. They provide validation using data annotation on the viewmodel attributes, and on the controller one can use _Model.IsValid_ to check for it. 
+
+ViewData and ViewBag  are weakly typed model types. The ViewData property is a dictionary of weakly typed objects. The ViewBag property is a wrapper around ViewData that provides dynamic properties for the underlying ViewData collection. They are dynamically resolved at runtime. One may pass data not only between controller and view, but also between views.
+
+ViewData:
+```
+Controller:
+
+ViewData["Greeting"] = "Hello";
+ViewData["Address"]  = new Address()
+{
+    Name = "Steve",
+    Street = "123 Main St",
+    City = "Hudson",
+    State = "OH",
+    PostalCode = "44236"
+};
+
+View:
+@{
+    // Since Address isn't a string, it requires a cast.
+    var address = ViewData["Address"] as Address;
+}
+
+@ViewData["Greeting"] World!
+
+<address>
+    @address.Name<br>
+    @address.Street<br>
+    @address.City, @address.State @address.PostalCode
+</address>
+```
+
+ViewBag:
+```
+Controller:
+
+ViewBag.Greeting = "Hello";
+ViewBag.Address  = new Address()
+{
+    Name = "Steve",
+    Street = "123 Main St",
+    City = "Hudson",
+    State = "OH",
+    PostalCode = "44236"
+};
+
+View:
+@ViewBag.Greeting World!
+
+<address>
+    @ViewBag.Address.Name<br>
+    @ViewBag.Address.Street<br>
+    @ViewBag.Address.City, @ViewBag.Address.State @ViewBag.Address.PostalCode
+</address>
+
+```
+
+
 #### Others
 
 * AOT
