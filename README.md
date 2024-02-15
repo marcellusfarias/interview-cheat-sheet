@@ -316,6 +316,28 @@ public class Example
 #### Performance and monitoring tools
 .
 
+#### Others
+
+Delegates: what is the difference between Func<T> vs ACtion<T> vs Predicate<T> 
+* Func returns a type
+* Action returns void
+* Predicate returns boolean
+
+Unsafe code => unaccessable for CLR "I want to read that specific part of memory".
+
+Reflection: abuse could turn on bad performance.
+
+ConfigureAwait(true) -> instructing the state machine to run on the same thread. 
+
+string.IsNullOrEmpty();
+string.IsNullOrWhiteSpace(); => whitespace is faster.
+
+LINQ: Language Integrated Query is a set of technologies that aim to express queries directly in C#. On its system there is for example IEnumerable and IQueryable.
+* IEnumerable: provides iteration features by returning an IEnumerator. Enumerator has MoveNext(), Reset(), Current property.
+* IQueryable: inherits IEnumerable. It has several extension methods that must be implemented by the provider (IQueryableProvider) to perform queries.
+* IQueryableProvider: there are several out there. For example,. LINQ to SQL, LINQ to XML, LINQ to Objects (System.Linq.Enumerable) etc. [Link](https://stackoverflow.com/questions/471502/what-is-linq-and-what-does-it-do)
+* Anonymous methods: a method that accepts a lambda expression and may return an anonymous object or another object. An anonymous object is created at compile time. Example: ``` myCustomers.Select(c => new { Name = c.Name; Age = c.Age; })```
+
 ## .NET
 
 #### Features
@@ -463,3 +485,17 @@ Workflow quality:
 * Different environments
 * CI/CD pipeline
 * Scrum/Kanbam
+
+#### Security
+
+How would you secure the apis? Think of approaches.
+* Authentication with JWT and Authorization with Attributes
+* SSL certificates (HTTPS)
+* Parameter validation with FluentValidation
+* Parameter encoding
+* Logging injection
+* Using secure libraries, not using OS commands, validating when downloading or accessing external resource
+* Sql Injection
+* Misconfiguration, exposed
+* Hash + salt for passwords
+
